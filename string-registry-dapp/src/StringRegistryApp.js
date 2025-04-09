@@ -69,7 +69,7 @@ async function addString({account, contract}) {
     }
 }
 
-async function updateString(contract) {
+async function updateString({contract}) {
     const stringList = document.getElementById("stringList");
     stringList.innerHTML = ""; // Clear the list before updating
 
@@ -78,6 +78,7 @@ async function updateString(contract) {
         strings.forEach((str, index) => {
             const li = document.createElement("li");
             li.textContent = str;
+            li.id = index;
             stringList.appendChild(li);
         });
     } catch (error) {

@@ -10,6 +10,12 @@ contract StringRegistry {
         strings.push(newString);
     }
 
+    function removeString(uint index) public {
+        require(index < strings.length && index >= 0, "Index hors limites");
+        strings[index] = strings[strings.length - 1];
+        strings.pop();
+    }
+
     // Function to retrieve all strings in the registry
     function getStrings() public view returns (string[] memory) {
         return strings;
