@@ -48,7 +48,7 @@ npx hardhat test
 
 ```bash
 # Déployer sur un réseau de test
-npx hardhat ignition deploy ignition/modules/StringRegistry.js --network <nom_du_réseau>
+npx hardhat ignition deploy ./ignition/modules/IncredibleStorage.js --network localhost
 ```
 
 ## Utilisation
