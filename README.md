@@ -56,7 +56,6 @@ Interactions possibles avec les contrats :
 - Ajouter une chaîne de caractères au registre
 - Récupérer toutes les chaînes stockées
 - Ajouter le hachage d'un fichier
-- Verrouiller et récupérer des fonds ETH
 
 ## Licence
 Ce projet est sous licence MIT.
