@@ -12,7 +12,9 @@ contract StringRegistry {
 
     function removeString(uint index) public {
         require(index < strings.length && index >= 0, "Index hors limites");
-        strings[index] = strings[strings.length - 1];
+        for (uint i = index; i < strings.length-1; i++) {
+            strings[i] = strings[i + 1];
+        }
         strings.pop();
     }
 
@@ -23,5 +25,19 @@ contract StringRegistry {
 
     function hashFile(string memory filePath) public {
         fileHashes.push(sha256(abi.encodePacked(filePath)));
+    }
+
+    function getFileHashes() public view returns (bytes32[] memory) {
+        return fileHashes;
+    }
+
+    function isHashPresent(string memory filePath) public view returns (bool) {
+        bytes32 fileHash = sha256(abi.encodePacked(filePath));
+        for (uint i = 0; i < fileHashes.length; i++) {
+            if (fileHashes[i] == fileHash) {
+                return true;
+            }
+        }
+        return false;
     }
 }

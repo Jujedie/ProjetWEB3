@@ -44,10 +44,17 @@ function StringRegistryApp(){
 
             <div id="liste des chaînes">
                 <h2>Liste des chaînes</h2>
-                <button id="refreshButton" onClick={() => updateString({contract})}>Rafraîchir</button>
+                <button id="refreshButton" onClick={() => updateString({contract, account})}>Rafraîchir</button>
                 <ul id="stringList">
-                    {/* La liste des chaînes sera affichée ici */}
+                    {/* Les chaînes seront affichées ici */}
                 </ul>
+            </div>
+
+            
+
+            <div>
+              <h2>Vérification du hash d'un fichier</h2>
+              <button id="checkHashButton" onClick={() => checkFileHash({ contract })}>Vérifier le hash d'un fichier</button>
             </div>
         </div>
     );
@@ -69,7 +76,7 @@ async function addString({account, contract}) {
     }
 }
 
-async function updateString({contract}) {
+async function updateString({contract, account}) {
     const stringList = document.getElementById("stringList");
     stringList.innerHTML = ""; // Clear the list before updating
 
@@ -77,7 +84,16 @@ async function updateString({contract}) {
         const strings = await contract.methods.getStrings().call();
         strings.forEach((str, index) => {
             const li = document.createElement("li");
-            li.textContent = str;
+            const p = document.createElement("p");
+            const btn = document.createElement("button");
+            btn.textContent = "Supprimer";
+            btn.onclick =  () => removeString({contract, account, index});
+
+            p.textContent = str;
+            
+            li.appendChild(p);
+            li.appendChild(btn);
+
             li.id = index;
             stringList.appendChild(li);
         });
@@ -85,6 +101,37 @@ async function updateString({contract}) {
         console.error("Erreur lors de la récupération des chaînes :", error);
         alert("Erreur lors de la récupération des chaînes. Vérifiez la console pour plus d'informations.");
     }
+}
+
+async function removeString({contract, account, index}) {
+    try {
+        await contract.methods.removeString(index).send({ from: account });
+        alert("Chaîne supprimée avec succès !");
+        updateString({contract});
+    } catch (error) {
+        console.error("Erreur lors de la suppression de la chaîne :", error);
+        alert("Erreur lors de la suppression de la chaîne. Vérifiez la console pour plus d'informations.");
+    }
+}
+
+async function checkFileHash({ contract }) {
+  const filePath = prompt("Entrez le chemin du fichier pour vérifier son hash :");
+  if (!filePath) {
+      alert("Veuillez entrer un chemin de fichier.");
+      return;
+  }
+
+  try {
+      const isPresent = await contract.methods.isHashPresent(filePath).call();
+      if (isPresent) {
+          alert("Le hash de ce fichier est déjà présent dans la blockchain.");
+      } else {
+          alert("Le hash de ce fichier n'est pas présent dans la blockchain.");
+      }
+  } catch (error) {
+      console.error("Erreur lors de la vérification du hash :", error);
+      alert("Erreur lors de la vérification du hash. Vérifiez la console pour plus d'informations.");
+  }
 }
 
 export default StringRegistryApp;
