@@ -31,14 +31,10 @@ cd ProjetWEB3
 npm install
 ```
 
-## Lancement
+## Lancement HardHat
 
 ```bash
 npx hardhat node
-
-# après les test et le déploiment
-cd string-registry-dapp
-npm start
 ```
 
 ## Tests
@@ -56,6 +52,17 @@ npx hardhat ignition deploy ./ignition/modules/StringRegistry.js --network local
 
 # Copier les json des contrats dans string-registry-dapp
 cp -r ./artifacts/contracts/StringRegistry.sol/StringRegistry.json ./string-registry-dapp/src/
+```
+
+## Lancement
+
+```bash
+# après les test et le déploiment
+cd string-registry-dapp
+
+npm install
+npm install web3
+npm start
 ```
 
 ## Utilisation
