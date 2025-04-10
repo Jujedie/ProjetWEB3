@@ -19,6 +19,7 @@ Une application décentralisée (DApp) permettant d'interagir avec la blockchain
 - Hardhat Ignition pour les déploiements
 - Ethers.js
 - Chai pour les tests
+- MetaMask
 
 ## Installation
 
