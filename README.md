@@ -55,7 +55,7 @@ npx hardhat test
 npx hardhat ignition deploy ./ignition/modules/StringRegistry.js --network localhost
 
 # Copier les json des contrats dans string-registry-dapp
-cp -r ./artifacts/contracts/StringRegistry.json ./string-registry-dapp/src/
+cp -r ./artifacts/contracts/StringRegistry.sol/StringRegistry.json ./string-registry-dapp/src/
 ```
 
 ## Utilisation
