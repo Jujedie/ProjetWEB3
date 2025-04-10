@@ -35,6 +35,10 @@ npm install
 
 ```bash
 npx hardhat node
+
+# après les test et le déploiment
+cd string-registry-dapp
+npm start
 ```
 
 ## Tests
@@ -49,6 +53,9 @@ npx hardhat test
 ```bash
 # Déployer sur un réseau de test
 npx hardhat ignition deploy ./ignition/modules/StringRegistry.js --network localhost
+
+# Copier les json des contrats dans string-registry-dapp
+cp -r ./artifacts/contracts/StringRegistry.json ./string-registry-dapp/src/
 ```
 
 ## Utilisation

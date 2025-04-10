@@ -17,7 +17,7 @@ function StringRegistryApp(){
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                     setAccount(accounts[0]);
 
-                    const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+                    const contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
                     const stringRegistry = new web3.eth.Contract(StringRegistry.abi, contractAddress);
                     setContract(stringRegistry);
 
@@ -43,8 +43,8 @@ function StringRegistryApp(){
             </div>
 
             <div id="liste des chaînes">
-                <h2>Liste des chaînes</h2>
-                <button id="refreshButton" onClick={() => updateString({contract, account})}>Rafraîchir</button>
+                <h2>Liste des chaînes<button id="refreshButton" onClick={() => updateString({contract, account})}>Rafraîchir</button></h2>
+                
                 <ul id="stringList">
                     {/* Les chaînes seront affichées ici */}
                 </ul>
@@ -53,8 +53,11 @@ function StringRegistryApp(){
             
 
             <div>
-              <h2>Vérification du hash d'un fichier</h2>
-              <button id="checkHashButton" onClick={() => checkFileHash({ contract })}>Vérifier le hash d'un fichier</button>
+                <h2>Hasher un fichier </h2>
+                <button id="checkHashButton" onClick={() => addFileHash({ contract, account })}>Ajouter le hash d'un fichier</button>
+
+                <h2>Vérification du hash d'un fichier</h2>
+                <button id="checkHashButton" onClick={() => checkFileHash({ contract })}>Vérifier l'éxistance du hash d'un fichier</button>
             </div>
         </div>
     );
@@ -70,6 +73,7 @@ async function addString({account, contract}) {
     try {
         await contract.methods.addString(stringInput).send({ from: account });
         alert("Chaîne ajoutée avec succès !");
+        updateString({contract, account});
     } catch (error) {
         console.error("Erreur lors de l'ajout de la chaîne :", error);
         alert("Erreur lors de l'ajout de la chaîne. Vérifiez la console pour plus d'informations.");
@@ -107,7 +111,7 @@ async function removeString({contract, account, index}) {
     try {
         await contract.methods.removeString(index).send({ from: account });
         alert("Chaîne supprimée avec succès !");
-        updateString({contract});
+        updateString({contract, account});
     } catch (error) {
         console.error("Erreur lors de la suppression de la chaîne :", error);
         alert("Erreur lors de la suppression de la chaîne. Vérifiez la console pour plus d'informations.");
@@ -124,13 +128,29 @@ async function checkFileHash({ contract }) {
   try {
       const isPresent = await contract.methods.isHashPresent(filePath).call();
       if (isPresent) {
-          alert("Le hash de ce fichier est déjà présent dans la blockchain.");
+          alert("Le hash de ce fichier est bien présent dans la blockchain.");
       } else {
           alert("Le hash de ce fichier n'est pas présent dans la blockchain.");
       }
   } catch (error) {
       console.error("Erreur lors de la vérification du hash :", error);
       alert("Erreur lors de la vérification du hash. Vérifiez la console pour plus d'informations.");
+  }
+}
+
+async function addFileHash({ contract, account }) {
+  const filePath = prompt("Entrez le chemin du fichier pour ajouter son hash :");
+  if (!filePath) {
+      alert("Veuillez entrer un chemin de fichier.");
+      return;
+  }
+
+  try {
+      await contract.methods.hashFile(filePath).send({ from: account });
+      alert("Hash de fichier ajouté avec succès !");
+  } catch (error) {
+      console.error("Erreur lors de l'ajout du hash :", error);
+      alert("Erreur lors de l'ajout du hash. Vérifiez la console pour plus d'informations.");
   }
 }
 
